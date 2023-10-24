@@ -7,8 +7,9 @@ class UsersController <ApplicationController
     @user = User.find(params[:id])
   end 
 
-  def create 
+  def create
     user = User.new(user_params)
+    session[:user_id] = user.id
     if user.save
       redirect_to user_path(user)
     else
@@ -22,6 +23,7 @@ class UsersController <ApplicationController
 
   def login
     user = User.find_by(email: params[:email])
+    session[:user_id] = user.id
     if user.authenticate(params[:password])
       flash[:success] = "Welcome, #{user.email}!"
       redirect_to root_path
